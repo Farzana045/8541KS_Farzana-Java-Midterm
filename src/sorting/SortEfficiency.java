@@ -45,6 +45,7 @@ public class SortEfficiency {
         // Retrieve all elements from the newly created table
         String query = "SELECT * FROM SELECTION_SORT";
         List<String> sorted_numbers = ssdb.executeQueryReadAllSingleColumn(query, "sorted_numbers");
+
         printValue(sorted_numbers);
 
         // endregion
@@ -53,11 +54,28 @@ public class SortEfficiency {
         randomize(numberArray);
 
         // region Insertion Sort
+
+        insertRandomNumbersIntoArray(numberArray);
+
         numberArray = algo.insertionSort(numberArray);
         long insertionSortExecutionTime = algo.executionTime;
 
+        // Insert sorted array into a database table, with the desired table name and column name
+        ssdb.insertIntegerArray("insertion_sort", "inserted_numbers", numberArray);
+
         System.out.println("Total Execution Time of " + numberArray.length + " numbers in Insertion Sort took: "
                 + insertionSortExecutionTime + " milliseconds");
+
+
+        System.out.println("***INSERTION SORT***\nArray Length: " + numberArray.length + "\nExecution Time: "
+                + insertionSortExecutionTime + " milliseconds");
+
+
+        // Retrieve all elements from the newly created table
+        String query_i = "SELECT * FROM INSERTION_SORT";
+        List<String> inserted_numbers = ssdb.executeQueryReadAllSingleColumn(query_i, "inserted_numbers");
+
+        printValue(inserted_numbers);
 
         // endregion
 
